@@ -54,12 +54,13 @@ router.get("/carts/:cid", async (req, res) => {
             product: item.product.toObject(),
             quantity: item.quantity
         }));
-        res.render("carts", { productos: productsInCart });
+        res.render("carts", { products: productsInCart });
 
     } catch (error) {
         console.error("Error while getting cart", error);
         res.status(500).json({ error: "Internar server error" });
     }
 });
+
 
 export default router;

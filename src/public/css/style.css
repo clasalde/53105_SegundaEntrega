@@ -16,16 +16,6 @@ input, select {
     font-size: 15px;
 }
 
-.inputForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 20vw;
-    gap: 2px;
-    margin: auto;
-}
-
 .container {
     display: flex;
     justify-content: center;
