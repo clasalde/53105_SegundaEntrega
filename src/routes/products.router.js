@@ -4,17 +4,32 @@ import ProductManager from "../controllers/product-manager.js";
 const router = Router();
 const productManager = new ProductManager();
 
+
+//modificamos por 2 entrega
 router.get("/", async (req, res) => {
 
     try {
-        const limit = req.query.limit;
-        const products = await productManager.getProducts();
+        const { limit = 10, page = 1, sort, query } = req.query;
+        const products = await productManager.getProducts({
+            limit: parseInt(limit),
+            page: parseInt(page),
+            sort,
+            query,
+        });
 
-        if (limit) {
-            res.json(products.slice(0, limit));
-        } else {
-            res.json(products);
-        }
+        res.json({
+            status: 'success',
+            payload: products,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${products.prevPage}&sort=${sort}&query=${query}` : null,
+            nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
+        });
+
     } catch (error) {
         console.error("Error while reading product list", error);
         res.status(500).json({ error: "Internal Server Error!" });
@@ -26,7 +41,7 @@ router.get("/:pid", async (req, res) => {
 
     try {
         const product = await productManager.getProductById(id);
-        if (!product) { 
+        if (!product) {
             return res.json({ error: "Product NOT FOUND" });
         }
         res.json(product);
