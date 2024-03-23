@@ -11,7 +11,7 @@ const router = Router();
 // Modificaciones por 2 entrega
 router.get("/products", async (req, res) => {
     try {
-        const { page = 1, limit = 2 } = req.query;
+        const { page = 1, limit = 6 } = req.query;
         const products = await productManager.getProducts({
             page: parseInt(page),
             limit: parseInt(limit)
@@ -43,7 +43,7 @@ router.get("/carts/:cid", async (req, res) => {
     const cartId = req.params.cid;
 
     try {
-        const cart = await cartManager.getCarritoById(cartId);
+        const cart = await cartManager.getCartById(cartId);
 
         if (!cart) {
             console.log("No Cart found with that ID");
@@ -61,18 +61,5 @@ router.get("/carts/:cid", async (req, res) => {
         res.status(500).json({ error: "Internar server error" });
     }
 });
-
-
-
-//Real Time Products Route
-router.get("/realtimeproducts", async (req, res) => {
-    try {
-        res.render("realtimeproducts");
-    } catch (error) {
-        res.status(500).json({
-            error: "Error interno del servidor"
-        });
-    }
-})
 
 export default router;
